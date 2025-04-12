@@ -23,45 +23,55 @@
 import hashlib
 import os
 
+def sha256(x):
+    return hashlib.sha256(x).digest()
+
+def xor_bytes(a, b):
+    return bytes(x ^ y for x, y in zip(a, b))
+
+def generate_mask(seed, i):
+    return sha256(seed + i.to_bytes(1, 'big'))
+
 def keypair():
-    secret = hashlib.sha256(os.urandom(32)).digest()
+    secret = sha256(os.urandom(32))
+    seed = os.urandom(16)
     public = secret
-    for _ in range(16):
-        public = hashlib.sha256(public).digest()
-    return secret, public
+    for i in range(16):
+        mask = generate_mask(seed, i)
+        public = sha256(xor_bytes(public, mask))
+    return (secret, seed), public
 
 def calculate_checksum(message):
-    return (16 - 1 - message).to_bytes(2, byteorder='big')
+    return (15 - message).to_bytes(2, byteorder='big') 
 
-def sign(message, secret):
-    if not (0 <= message <= 15):
-        raise ValueError("Message must be a 4-bit integer (0–15).")
-    
+def sign(message, keypair):
+    secret, seed = keypair
     checksum = calculate_checksum(message)
-    
     sig = secret
-    for _ in range(message):
-        sig = hashlib.sha256(sig).digest()
-
-    signature = sig + checksum
-    return signature
+    for i in range(message):
+        mask = generate_mask(seed, i)
+        sig = sha256(xor_bytes(sig, mask))
+    return sig + checksum + seed
 
 def verify(signature, public, message):
-    
-    sig = signature[:-2]
-    checksum = signature[-2:]
+    sig = signature[:32]
+    checksum = signature[32:34]
+    seed = signature[34:]
 
-    calculated_checksum = calculate_checksum(message)
-    if checksum != calculated_checksum:
-        return False  
-    check = sig
-    for _ in range(16 - message):
-        check = hashlib.sha256(check).digest()
+    if checksum != calculate_checksum(message):
+        return False
 
-    return check == public
+    val = sig
+    for i in range(message, 16):
+        mask = generate_mask(seed, i)
+        val = sha256(xor_bytes(val, mask))
 
-# message = 12
-# secret, public = keypair()
-# signature = sign(message, secret)
-# print("Signature:", signature.hex())
-# print("Verification result:", verify(signature, public, message))
+    return val == public
+
+# === Example Run ===
+if __name__ == "__main__":
+    message = 12
+    key, pub = keypair()
+    sig = sign(message, key)
+    print("Signature:", sig.hex())
+    print("Valid? ->", verify(sig, pub, message))
