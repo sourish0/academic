@@ -68,7 +68,7 @@ def verify(signature, public, message):
 
     return val == public
 
-# === Example Run ===
+
 if __name__ == "__main__":
     message = 12
     key, pub = keypair()
