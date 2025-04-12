@@ -51,7 +51,6 @@ original_len = len(message)
 verified_message = verified_bits[:original_len]
 verified_checksum = verified_bits[original_len:]
 
-# Decoded and verified output
 decoded = decode_message(verified_message)
 checksum_valid = verify_checksum(verified_message, verified_checksum)
 

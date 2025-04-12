@@ -8,6 +8,7 @@ def keypair():
     return p0+p1+p2+p3, s0+s1+s2+s3
 
 def sign(message, private_key):
+    # message =int(message)
     if message < 0 or message > 15:
         raise ValueError
     m0 = singlebit.sign(1 & (message >> 0), private_key[0:64])
@@ -26,18 +27,18 @@ def verify(signedbit, public_key):
     return (m0 + 2*m1 + 4*m2 + 8*m3)
 
 
-private_key, public_key = keypair()
-signedbit = sign(11, private_key)
+# private_key, public_key = keypair()
+# signedbit = sign(11, private_key)
 
-print(f"Private Key: {private_key.hex()}")
-print(f"Public Key:  {public_key.hex()}")
-print(f"Signature:   {signedbit}")
+# print(f"Private Key: {private_key.hex()}")
+# print(f"Public Key:  {public_key.hex()}")
+# print(f"Signature:   {signedbit}")
 
-# This should be True
-print(signedbit[2][1])
-print(singlebit.sign(int(signedbit[2][0]), private_key[128:192])[1])
+# # This should be True
+# print(signedbit[2][1])
+# print(singlebit.sign(int(signedbit[2][0]), private_key[128:192])[1])
 
 
-verified_bit = verify(signedbit, public_key)
-print(f"Verified bit: {verified_bit}")
+# verified_bit = verify(signedbit, public_key)
+# print(f"Verified bit: {verified_bit}")
 
