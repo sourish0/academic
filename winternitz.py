@@ -68,10 +68,10 @@ def verify(signature, public, message):
 
     return val == public
 
-# === Example Run ===
-if __name__ == "__main__":
-    message = 12
-    key, pub = keypair()
-    sig = sign(message, key)
-    print("Signature:", sig.hex())
-    print("Valid? ->", verify(sig, pub, message))
+
+# if __name__ == "__main__":
+#     message = 12
+#     key, pub = keypair()
+#     sig = sign(message, key)
+#     print("Signature:", sig.hex())
+#     print("Valid? ->", verify(sig, pub, message))
