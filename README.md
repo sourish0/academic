@@ -8,5 +8,5 @@ work done:-
 
 works to do: -
 
-1. merkle tree(lamport and winternitz)
-2. SPHINCS+
+1. ~~merkle tree(lwinternitz)~~
+2. SPHINCS+ (Later on)

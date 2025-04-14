@@ -39,24 +39,24 @@ def verify_checksum(message_bits, checksum_bits):
     recalculated = compute_checksum(message_bits, BASE)
     return recalculated == checksum_bits
 
-text = "hello world"
-message = encode_message(text)
-checksum = compute_checksum(message, BASE)
-full_message = message + checksum
+# text = "hello world"
+# message = encode_message(text)
+# checksum = compute_checksum(message, BASE)
+# full_message = message + checksum
 
-keypairs, signatures = sign_full_message(full_message)
-verified_bits = verify_full_message(signatures, keypairs)
+# keypairs, signatures = sign_full_message(full_message)
+# verified_bits = verify_full_message(signatures, keypairs)
 
-original_len = len(message)
-verified_message = verified_bits[:original_len]
-verified_checksum = verified_bits[original_len:]
+# original_len = len(message)
+# verified_message = verified_bits[:original_len]
+# verified_checksum = verified_bits[original_len:]
 
-decoded = decode_message(verified_message)
-checksum_valid = verify_checksum(verified_message, verified_checksum)
+# decoded = decode_message(verified_message)
+# checksum_valid = verify_checksum(verified_message, verified_checksum)
 
-print(f"Original Text:      {text}")
-print(f"Encoded Message:    {message}")
-print(f"Checksum (chunks):  {checksum}")
-print(f"Verified Bits:      {verified_bits}")
-print(f"Decoded Message:    {decoded}")
-print(f"Checksum Valid:     {checksum_valid}")
+# print(f"Original Text:      {text}")
+# print(f"Encoded Message:    {message}")
+# print(f"Checksum (chunks):  {checksum}")
+# print(f"Verified Bits:      {verified_bits}")
+# print(f"Decoded Message:    {decoded}")
+# print(f"Checksum Valid:     {checksum_valid}")
